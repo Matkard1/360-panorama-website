@@ -18,41 +18,68 @@
             height: 100%;
             position: relative;
         }
+        /* Styl wyszukiwarki w prawym górnym rogu */
+        .search-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+        .search-container input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .search-container button {
+            padding: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
 <div id="panorama"></div>
 
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Szukaj klasy...">
+    <button onclick="goToScene()">Przejdź</button>
+</div>
+
 <script>
-    pannellum.viewer('panorama', {
+    // Inicjalizacja widoku pannellum
+    const viewer = pannellum.viewer('panorama', {
         "default": {
-            "firstScene": "czechy",
-            "author": "Matkard",
+            "firstScene": "portiernia",
             "sceneFadeDuration": 1000
         },
 
-        "scenes": {
-            "czechy": {
-                "title": "Czechy",
+        "scenes": {               
+            "portiernia": {
+                "title": "Portiernia",
                 "hfov": 110,
                 "pitch": 0,
                 "yaw": 100,
                 "type": "equirectangular",
                 "panorama": "images/image1.jpg",
+                "autoLoad": true,
                 "hotSpots": [
+                    { 
+                        "pitch": 5, 
+                        "yaw": 160,
+                        "type": "info",
+                        "text": "Portiernia"
+                    },
                     {
-                        "pitch": 170,
-                        "yaw": 0,
+                        "pitch": 5,
+                        "yaw": 120,
                         "type": "scene",
-                        "text": "Przejdź do Domu",
-                        "sceneId": "dom"
+                        "text": "Przejdź do Korytarza Głównego",
+                        "sceneId": "korytarzGlowny"
                     }
                 ]
             },
-
-            "dom": {
-                "title": "Dom",
+            "korytarzGlowny": {
+                "title": "Korytarz Główny",
                 "hfov": 110,
                 "pitch": 0,
                 "yaw": 100,
@@ -60,16 +87,101 @@
                 "panorama": "images/image2.jpg",
                 "hotSpots": [
                     {
-                        "pitch": 180,
-                        "yaw": -150,
+                        "pitch": 0,
+                        "yaw": 130,
                         "type": "scene",
-                        "text": "Powrót do Czech",
-                        "sceneId": "czechy"
+                        "text": "Przejdź do Niebieskiego Dywanu",
+                        "sceneId": "niebieskiDywan"
+                    },
+                    {
+                        "pitch": 180,
+                        "yaw": -130,
+                        "type": "scene",
+                        "text": "Przejdź z powrotem do portierni", 
+                        "sceneId": "portiernia"
+                    },
+                    {
+                        "pitch": 0,
+                        "yaw": -120,
+                        "type": "scene",
+                        "text": "Biblioteka",
+                        "sceneId": "biblioteka"
+                    }
+                ]
+            },
+            "niebieskiDywan": {
+                "title": "Niebieski Dywan",
+                "hfov": 110,
+                "pitch": 0,
+                "yaw": 100,
+                "type": "equirectangular",
+                "panorama": "images/image5.jpg",
+                "hotSpots": [
+                    { 
+                        "pitch": -5, 
+                        "yaw": 320,
+                        "type": "info",
+                        "text": "Sklepik Szkolny"
+                    },
+                    { 
+                        "pitch": -5, 
+                        "yaw": 298,
+                        "type": "info",
+                        "text": "Sekretariat"
+                    },
+                    {
+                        "pitch": 180,
+                        "yaw": 45,
+                        "type": "scene",
+                        "text": "Powrót do Korytarza Głównego",
+                        "sceneId": "korytarzGlowny"
+                    }
+                ]
+            },
+            "biblioteka": {
+                "title": "Biblioteka",
+                "hfov": 110,
+                "pitch": 0,
+                "yaw": 100,
+                "type": "equirectangular",
+                "panorama": "images/image4.jpg",
+                "hotSpots": [
+                    { 
+                        "pitch": 5, 
+                        "yaw": 130,
+                        "type": "info",
+                        "text": "Biblioteka",
+                        "URL": "https://www.1lo.pl/biblioteka/"
+                    },
+                    {
+                        "pitch": 10,
+                        "yaw": 0,
+                        "type": "scene",
+                        "text": "Powrót do Korytarza Głównego",
+                        "sceneId": "korytarzGlowny"
                     }
                 ]
             }
         }
     });
+
+  
+    function goToScene() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const scenes = {
+            "1": "portiernia",
+            "2": "korytarzGlowny",
+            "5": "niebieskiDywan",
+            "4": "biblioteka"
+        };
+
+ 
+        if (scenes[input]) {
+            viewer.loadScene(scenes[input]);
+        } else {
+            alert("klasa nie znaleziona. Spróbuj ponownie.");
+        }
+    }
 </script>
 
 </body>
